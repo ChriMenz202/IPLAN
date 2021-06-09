@@ -95,6 +95,7 @@ public class Editor {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        if(checkTimeSpan() && checkMinutes()){
                         String current = System.getProperty("user.dir");
                         File f = new File(current, path);
                         try {
@@ -111,6 +112,9 @@ public class Editor {
 
                         Value.frame.setVisible(false);
                         new AdminFrame("ADMIN");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Eingegebene Zeit ist nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                 });
                 Value.frame.getContentPane().add(save);
@@ -191,6 +195,39 @@ public class Editor {
             }else{
                 checked = false;
                 break;
+            }
+        }
+        return checked;
+    }
+    public boolean checkMinutes(){
+        boolean checked = false;
+        for (String line: field.getText().split("\n")) {
+            String[] temp = line.split(";");
+            String[] i = (temp[2].split("-"));
+            int from = Integer.parseInt(i[0].split(":")[1]);
+            int to = Integer.parseInt(i[1].split(":")[1]);
+            if (from < 0 || to > 60){
+                checked = false;
+                break;
+            }else{
+                checked = true;
+            }
+        }
+        return checked;
+    }
+
+    public boolean checkTimeSpan(){
+        boolean checked = false;
+        for (String line: field.getText().split("\n")) {
+            String[] temp = line.split(";");
+            String[] i = (temp[2].split("-"));
+            int from = Integer.parseInt(i[0].split(":")[0]);
+            int to = Integer.parseInt(i[1].split(":")[0]);
+            if (from < 8 || to >= 23){
+                checked = false;
+                break;
+            }else{
+                checked = true;
             }
         }
         return checked;
