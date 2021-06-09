@@ -1,3 +1,10 @@
+/*Project: IPLAN
+ *Package: data
+ *Description:
+ *Author: Christoph Menzinger
+ *Last Change:  05.06.2021
+ */
+
 package gui;
 
 import data.CsvReader;
@@ -11,14 +18,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Locale;
 
-/*Project: IPLAN
- *Package: data
- *Description:
- *Author: Christoph Menzinger
- *Last Change:  05.06.2021
- */
 public class Editor {
 
     JTextArea field = new JTextArea();
@@ -48,109 +48,122 @@ public class Editor {
         save.setFocusPainted(false);
 
         //rooms editor
-        if (path.equals("/res/rooms.csv")) {
-            for (int i = 0; i < Value.rooms.getData().size(); i++) {
-                field.append(Value.rooms.getData().get(i) + "\n");
-            }
-            save.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String current = System.getProperty("user.dir");
-                    File f = new File(current, path);
-                    try {
-                        FileWriter w = new FileWriter(f);
-                        w.close();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    for (String line : field.getText().split("\n")) {
-                        CsvWriter c = new CsvWriter(f, line);
-                    }
-                    //empty roomsList
-                    for (int i = 0; i < Value.rooms.getData().size(); i++) {
-                        Value.rooms.getData().remove(i);
-                    }
-                    //refill the roomsList
-                    CsvReader c = new CsvReader("/res/rooms.csv");
-                    Value.rooms = c;
-
-                    Value.frame.setVisible(false);
-                    new AdminFrame("ADMIN");
+        //coursesEditor
+        //userListEditor
+        switch (path) {
+            case "/res/rooms.csv" -> {
+                for (int i = 0; i < Value.rooms.getData().size(); i++) {
+                    field.append(Value.rooms.getData().get(i) + "\n");
                 }
-            });
-            Value.frame.getContentPane().add(save);
-            Value.frame.setVisible(true);
+                save.addActionListener(new ActionListener() {
 
-            //coursesEditor
-        } else if (path.equals("/res/Courses.csv")) {
-            for (int i = 0; i < Value.allCourses.getData().size(); i++) {
-                field.append(Value.allCourses.getData().get(i) + "\n");
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String current = System.getProperty("user.dir");
+                        File f = new File(current, path);
+                        try {
+                            FileWriter w = new FileWriter(f);
+                            w.close();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        for (String line : field.getText().split("\n")) {
+                            CsvWriter c = new CsvWriter(f, line);
+                        }
+
+                        refillLists("/res/rooms.csv");
+
+                        Value.frame.setVisible(false);
+                        new AdminFrame("ADMIN");
+                    }
+                });
+                Value.frame.getContentPane().add(save);
+                Value.frame.setVisible(true);
             }
-            save.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String current = System.getProperty("user.dir");
-                    File f = new File(current, path);
-                    try {
-                        FileWriter w = new FileWriter(f);
-                        w.close();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    for (String line : field.getText().split("\n")) {
-                        CsvWriter c = new CsvWriter(f, line);
-                    }
-                    //empty roomsList
-                    for (int i = 0; i < Value.allCourses.getData().size(); i++) {
-                        Value.allCourses.getData().remove(i);
-                    }
-                    //refill the roomsList
-                    CsvReader c = new CsvReader("/res/Courses.csv");
-                    Value.allCourses = c;
-
-                    Value.frame.setVisible(false);
-                    new AdminFrame("ADMIN");
+            case "/res/Courses.csv" -> {
+                for (int i = 0; i < Value.allCourses.getData().size(); i++) {
+                    field.append(Value.allCourses.getData().get(i) + "\n");
                 }
-            });
-            Value.frame.getContentPane().add(save);
-            Value.frame.setVisible(true);
-            //userListEditor
-        } else if (path.equals("/res/UserList.csv")) {
-            for (int i = 0; i < Value.users.getData().size(); i++) {
-                field.append(Value.users.getData().get(i) + "\n");
+                save.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String current = System.getProperty("user.dir");
+                        File f = new File(current, path);
+                        try {
+                            FileWriter w = new FileWriter(f);
+                            w.close();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        for (String line : field.getText().split("\n")) {
+                            CsvWriter c = new CsvWriter(f, line);
+                        }
+                        refillLists("/res/Courses.csv");
+
+
+                        Value.frame.setVisible(false);
+                        new AdminFrame("ADMIN");
+                    }
+                });
+                Value.frame.getContentPane().add(save);
+                Value.frame.setVisible(true);
             }
-            save.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String current = System.getProperty("user.dir");
-                    File f = new File(current, path);
-                    try {
-                        FileWriter w = new FileWriter(f);
-                        w.close();
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-                    for (String line : field.getText().split("\n")) {
-                        CsvWriter c = new CsvWriter(f, line);
-                    }
-                    //empty roomsList
-                    for (int i = 0; i < Value.users.getData().size(); i++) {
-                        Value.users.getData().remove(i);
-                    }
-                    //refill the roomsList
-                    CsvReader c = new CsvReader("/res/UserList.csv");
-                    Value.users = c;
-
-                    Value.frame.setVisible(false);
-                    new AdminFrame("ADMIN");
+            case "/res/UserList.csv" -> {
+                for (int i = 0; i < Value.users.getData().size(); i++) {
+                    field.append(Value.users.getData().get(i) + "\n");
                 }
-            });
-            Value.frame.getContentPane().add(save);
-            Value.frame.setVisible(true);
+                save.addActionListener(new ActionListener() {
 
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String current = System.getProperty("user.dir");
+                        File f = new File(current, path);
+                        try {
+                            FileWriter w = new FileWriter(f);
+                            w.close();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        for (String line : field.getText().split("\n")) {
+                            CsvWriter c = new CsvWriter(f, line);
+                        }
+                        refillLists("/res/UserList.csv");
+
+                        Value.frame.setVisible(false);
+                        new AdminFrame("ADMIN");
+                    }
+                });
+                Value.frame.getContentPane().add(save);
+                Value.frame.setVisible(true);
+            }
+        }
+    }
+
+    public void refillLists(String directory){
+        CsvReader c;
+        switch (directory) {
+            case "/res/UserList.csv" -> {
+                for (int i = 0; i < Value.users.getData().size(); i++) {
+                Value.users.getData().remove(i);
+                }
+                 c = new CsvReader(directory);
+                Value.users = c;
+            }
+            case "/res/Courses.csv" -> {
+                for (int i = 0; i < Value.allCourses.getData().size(); i++) {
+                    Value.allCourses.getData().remove(i);
+                }
+                 c = new CsvReader(directory);
+                Value.allCourses = c;
+            }
+            case "/res/rooms.csv" ->{
+                for (int i = 0; i < Value.rooms.getData().size(); i++) {
+                    Value.rooms.getData().remove(i);
+                }
+                c = new CsvReader(directory);
+                Value.rooms = c;
+            }
         }
     }
 }

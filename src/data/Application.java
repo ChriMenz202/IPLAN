@@ -22,8 +22,8 @@ import gui.StudentFrame;
 
 public class Application {
     public static void main(String[] args){
-//        new AdminFrame("admin");
+     new AdminFrame("admin");
 //        new StudentFrame("student");
-        new LoginFrame();
+//        new LoginFrame();
     }
 }
