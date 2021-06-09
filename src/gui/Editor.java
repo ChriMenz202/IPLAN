@@ -23,7 +23,13 @@ public class Editor {
 
     JTextArea field = new JTextArea();
 
-    ///res/rooms.csv
+    /**
+     * Create an rework courses, rooms and userList by reading the given
+     * csv file, empty the file and after pushing the button fill the file
+     * with the input of the TextArea
+     *
+     * @param path switch case for the path to rebuild the given file
+     */
     public Editor(String path) {
         Value.frame = new JFrame();
         Value.frame.setSize(500, 500);
@@ -47,9 +53,6 @@ public class Editor {
         save.setForeground(Color.BLACK);
         save.setFocusPainted(false);
 
-        //rooms editor
-        //coursesEditor
-        //userListEditor
         switch (path) {
             case "/res/rooms.csv" -> {
                 for (int i = 0; i < Value.rooms.getData().size(); i++) {
@@ -59,22 +62,26 @@ public class Editor {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String current = System.getProperty("user.dir");
-                        File f = new File(current, path);
-                        try {
-                            FileWriter w = new FileWriter(f);
-                            w.close();
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                        for (String line : field.getText().split("\n")) {
-                            CsvWriter c = new CsvWriter(f, line);
-                        }
+                        if(checkRooms()) {
+                            String current = System.getProperty("user.dir");
+                            File f = new File(current, path);
+                            try {
+                                FileWriter w = new FileWriter(f);
+                                w.close();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                            for (String line : field.getText().split("\n")) {
+                                CsvWriter c = new CsvWriter(f, line);
+                            }
 
-                        refillLists("/res/rooms.csv");
+                            refillLists("/res/rooms.csv");
 
-                        Value.frame.setVisible(false);
-                        new AdminFrame("ADMIN");
+                            Value.frame.setVisible(false);
+                            new AdminFrame("ADMIN");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Ihre Eingabe ist nicht korrekt, Raum muss folgend eingegeben werden \"R[1-9]\"", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                 });
                 Value.frame.getContentPane().add(save);
@@ -140,6 +147,11 @@ public class Editor {
         }
     }
 
+    /**
+     *delete Value.<lists> and empty the associated file
+     *
+     * @param directory of the file which gets deleted
+     */
     public void refillLists(String directory){
         CsvReader c;
         switch (directory) {
@@ -165,5 +177,22 @@ public class Editor {
                 Value.rooms = c;
             }
         }
+    }
+
+    /**
+     * check if inputs in roomEditor are correct
+     * @return boolean true or false
+     */
+    public boolean checkRooms(){
+        boolean checked = false;
+        for (String line: field.getText().split("\n")) {
+            if (line.matches("R[0-9]*")){
+                checked = true;
+            }else{
+                checked = false;
+                break;
+            }
+        }
+        return checked;
     }
 }
