@@ -15,6 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -24,9 +27,12 @@ public class StudentFrame {
 
 
 
-
+    File f;
     String path = System.getProperty("user.dir");
     JTextArea course = new JTextArea();
+    JTextField courseField = new JTextField();
+    JTextArea courses = new JTextArea();
+    CsvReader studentCourses;
 
 
     /**
@@ -39,7 +45,7 @@ public class StudentFrame {
 
         //create the correct dir if not exists
         this.path = path + "\\res\\" + loginDir;
-        File f = new File(path + "\\course.csv");
+        f = new File(path + "\\course.csv");
         try {
             if (!f.exists()) {
                 f.createNewFile();
@@ -48,7 +54,7 @@ public class StudentFrame {
             e.printStackTrace();
         }
 
-        CsvReader studentCourses = new CsvReader("/res/" + loginDir + "/course.csv");
+        this.studentCourses = new CsvReader("/res/" + loginDir + "/course.csv");
 
         Value.frame = new JFrame();
         Value.frame.setSize(500, 500);
@@ -83,7 +89,7 @@ public class StudentFrame {
                 if (String.valueOf(tempCourse).equals(String.valueOf(tempCompare))) {
                     String[] tempLine = Value.allCourses.getData().get(j).split(";");
                     for (int t = 0; t < tempLine.length; t++) {
-                        course.append(tempLine[t]+"    ");
+                        course.append(tempLine[t]+";");
                     }
                     course.append("\n");
                 }
@@ -110,7 +116,7 @@ public class StudentFrame {
                 frame.setResizable(false);
                 frame.setVisible(true);
 
-                JTextField courseField = new JTextField();
+                courseField = new JTextField();
                 JLabel jLabel = new JLabel("Wähle einen Kurs");
                 courseField.setBounds(320,10,155,28);
                 jLabel.setBounds(350,35,150,28);
@@ -118,7 +124,7 @@ public class StudentFrame {
                 frame.getContentPane().add(jLabel);
 
 
-                JTextArea courses = new JTextArea();
+                courses = new JTextArea();
                 courses.setLineWrap(true);
                 courses.setWrapStyleWord(true);
                 courses.setEditable(false);
@@ -130,7 +136,7 @@ public class StudentFrame {
                 for (int i = 0; i < Value.allCourses.getData().size(); i++) {
                     String[] temp = Value.allCourses.getData().get(i).split(";");
                     for (int j = 0; j < temp.length; j++) {
-                        courses.append(temp[j] + "    ");
+                        courses.append(temp[j] + ";");
                     }
                     courses.append("\n");
                 }
@@ -143,42 +149,9 @@ public class StudentFrame {
                 addCourse.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String chose = courseField.getText().toUpperCase(Locale.ROOT);
-                        boolean check = true;
-                        boolean exist = true;
-                        String set = "";
-                        for (int i = 0; i < Value.allCourses.getData().size(); i++) {
-                            if(chose.equals(Value.allCourses.getData().get(i).split(";")[0])){
-                                exist = true;
-                                break;
-                            }else{
-                                exist = false;
-                            }
-                        }
-                        if (exist == false){
-                            JOptionPane.showMessageDialog(null, "Dieser Kurs existiert nicht!", "Achtung", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        for (int i = 0; i < studentCourses.getData().size(); i++) {
-                            //course already sign in
-                            if (chose.equals(String.valueOf(studentCourses.getData().get(i).split(";")[0]))) {
-                                JOptionPane.showMessageDialog(null, "Du bist bereits in diesem Kurs!", "Achtung", JOptionPane.INFORMATION_MESSAGE);
-                                check = false;
-                            }
-                        }
-                        if (check && exist){
-                            for (int i = 0; i < Value.allCourses.getData().size(); i++) {
-                                if(chose.equals(String.valueOf(Value.allCourses.getData().get(i).split(";")[0]))){
-                                  set= Value.allCourses.getData().get(i);
-                                }
-                            }
-                            studentCourses.setData(chose);
-                            CsvWriter c = new CsvWriter(f,chose);
-                            String[] temp = set.split(";");
-                            for (int i = 0; i < temp.length; i++) {
-                                course.append(temp[i]+"    ");
-                            }
-                            course.append("\n");
-                        }
+
+                        courseExist();
+                        //TODO
                     }
                 });
                 frame.getContentPane().add(addCourse);
@@ -217,4 +190,45 @@ public class StudentFrame {
         Value.frame.getContentPane().add(addCourse);
         Value.frame.setVisible(true);
     }
+
+    public void courseExist(){
+        String chose = courseField.getText().toUpperCase(Locale.ROOT);
+        boolean check = true;
+        boolean exist = true;
+        String set = "";
+        for (int i = 0; i < Value.allCourses.getData().size(); i++) {
+            if(chose.equals(Value.allCourses.getData().get(i).split(";")[0])){
+                exist = true;
+                break;
+            }else{
+                exist = false;
+            }
+        }
+        if (exist == false){
+            JOptionPane.showMessageDialog(null, "Dieser Kurs existiert nicht!", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+        }
+        for (int i = 0; i < studentCourses.getData().size(); i++) {
+
+            //course already sign in
+            if (chose.equals(String.valueOf(studentCourses.getData().get(i).split(";")[0]))) {
+                JOptionPane.showMessageDialog(null, "Du bist bereits in diesem Kurs!", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+                check = false;
+            }
+        }
+        if (check && exist){
+            for (int i = 0; i < Value.allCourses.getData().size(); i++) {
+                if(chose.equals(String.valueOf(Value.allCourses.getData().get(i).split(";")[0]))){
+                    set= Value.allCourses.getData().get(i);
+                }
+            }
+            studentCourses.setData(chose);
+            CsvWriter c = new CsvWriter(f,chose);
+            String[] temp = set.split(";");
+            for (int i = 0; i < temp.length; i++) {
+                course.append(temp[i]+"    ");
+            }
+            course.append("\n");
+        }
+    }
+
 }

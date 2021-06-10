@@ -15,15 +15,13 @@ import gui.StudentFrame;
 /**
  * TODO
  * LehrPersonal präferenz
- * Zwei Kurse im selben Zeitfenster
- * Keine Kurse vor 8 und nach 23 Uhr
  * Studierende sollten nicht in zwei Kursen eingeschrieben zur gleichen Zeit sein
  */
 
 public class Application {
     public static void main(String[] args){
-     new AdminFrame("admin");
-//        new StudentFrame("student");
+        new AdminFrame("admin");
+     //  new StudentFrame("student");
 //        new LoginFrame();
     }
 }
