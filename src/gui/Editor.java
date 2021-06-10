@@ -9,6 +9,7 @@ package gui;
 
 import data.CsvReader;
 import data.CsvWriter;
+import data.StudentData;
 import data.Value;
 
 import javax.swing.*;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class Editor {
 
     JTextArea field = new JTextArea();
+    JTextField role;
 
     /**
      * Create an rework courses, rooms and userList by reading the given
@@ -51,6 +53,8 @@ public class Editor {
         save.setBackground(Color.WHITE);
         save.setForeground(Color.BLACK);
         save.setFocusPainted(false);
+
+
 
         switch (path) {
             case "/res/rooms.csv" -> {
@@ -114,6 +118,30 @@ public class Editor {
                 Value.frame.setVisible(true);
             }
             case "/res/UserList.csv" -> {
+                role = new JTextField();
+                role.setBounds(320, 10, 155, 28);
+                JLabel jLabel = new JLabel("Wähle Student");
+                jLabel.setBounds(360, 35, 150, 28);
+                Value.frame.getContentPane().add(role);
+                Value.frame.getContentPane().add(jLabel);
+
+                JButton edit = new JButton("Bearbeiten");
+                edit.setBounds(320, 377, 155, 28);
+                edit.setVisible(true);
+                edit.setBackground(Color.WHITE);
+                edit.setForeground(Color.BLACK);
+                edit.setFocusPainted(false);
+                edit.addActionListener(e -> {
+                    if(role.getText().equals("")){
+                        JOptionPane.showMessageDialog(null, "Keine Eingabe getätigt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+                    }else{
+                        Value.frame.setVisible(false);
+                        new StudentData(role.getText());
+                    }
+
+                });
+                Value.frame.getContentPane().add(edit);
+
                 for (int i = 0; i < Value.users.getData().size(); i++) {
                     field.append(Value.users.getData().get(i) + "\n");
                 }

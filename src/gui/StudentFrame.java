@@ -70,8 +70,8 @@ public class StudentFrame {
         course.setVisible(true);
         Value.frame.getContentPane().add(course);
 
-        //TODO TIME MATCH QUERY
         addStudentCourses();
+        appointmentCollision();
 
         JButton addCourse = new JButton("Kurse");
         addCourse.setBounds(320, 10, 155, 28);
@@ -79,6 +79,7 @@ public class StudentFrame {
         addCourse.setBackground(Color.WHITE);
         addCourse.setForeground(Color.BLACK);
         addCourse.setFocusPainted(false);
+
         //student can sign in in courses
         addCourse.addActionListener(e -> {
             JFrame frame = new JFrame();
@@ -106,7 +107,6 @@ public class StudentFrame {
             courses.append("Kurse:\n\n");
             frame.getContentPane().add(courses);
 
-
             for (int i = 0; i < Value.allCourses.getData().size(); i++) {
                 String[] temp = Value.allCourses.getData().get(i).split(";");
                 for (String s : temp) {
@@ -114,6 +114,7 @@ public class StudentFrame {
                 }
                 courses.append("\n");
             }
+
             JButton addCourse1 = new JButton("Kurs beitreten");
             addCourse1.setBounds(320, 80, 155, 28);
             addCourse1.setVisible(true);
@@ -189,6 +190,7 @@ public class StudentFrame {
             Value.frame.setVisible(false);
             new LoginFrame();
         });
+
         Value.frame.getContentPane().add(exit);
         Value.frame.getContentPane().add(addCourse);
         Value.frame.setVisible(true);
@@ -257,7 +259,7 @@ public class StudentFrame {
             new CsvWriter(f, line);
         }
         String message = "--------------------------------------------------------------------------------";
-        new  CsvWriter(f,message);
+        new CsvWriter(f, message);
     }
 
     /**
@@ -287,6 +289,24 @@ public class StudentFrame {
         for (Course c : compareList) {
             course.append(c.getDay() + "   " + c.getName() + "   " + c.getTime() + "   " + c.getRoom() + "   " + c.getTeacher());
             course.append("\n");
+        }
+    }
+
+    public void appointmentCollision() {
+        boolean flag = false;
+        for (int i = 0; i < compareList.size(); i++) {
+            for (int j = i + 1; j < compareList.size(); j++) {
+                if ((compareList.get(i).getDay().equals(compareList.get(j).getDay())) &&
+                        compareList.get(i).getTime().split("-")[0].split(":")[0].equals(compareList.get(j).getTime().split("-")[0].split(":")[0]) &&
+                        compareList.get(i).getRoom().equals(compareList.get(j).getRoom())) {
+                    JOptionPane.showMessageDialog(null, "Ihre Termine Kollidieren,\nBitte Kontaktieren sie den Admin!\nKurs: "+compareList.get(i).getName(), "WARNUNG!", JOptionPane.INFORMATION_MESSAGE);
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                break;
+            }
         }
     }
 }
