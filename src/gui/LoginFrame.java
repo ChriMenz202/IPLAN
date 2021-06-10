@@ -61,7 +61,10 @@ public class LoginFrame {
                             Value.frame.setVisible(false);
                             new AdminFrame(singleUser[0]);
                         }
-                        case "isAssist" -> System.out.println("ja assistent");
+                        case "isAssist" -> {
+                            Value.frame.setVisible(false);
+                            new AssistantFrame(singleUser[0]);
+                        }
                         case "isStudent" -> {
                             Value.frame.setVisible(false);
                             new StudentFrame(singleUser[0]);

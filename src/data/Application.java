@@ -8,20 +8,21 @@
 package data;
 
 import gui.AdminFrame;
+import gui.AssistantFrame;
 import gui.LoginFrame;
 import gui.StudentFrame;
 
 
 /**
  * TODO
- * LehrPersonal präferenz
  * Studierende sollten nicht in zwei Kursen eingeschrieben zur gleichen Zeit sein
  */
 
 public class Application {
     public static void main(String[] args) {
         //new AdminFrame("admin");
-//        new StudentFrame("student");
-        new LoginFrame();
+        new StudentFrame("student");
+        //new LoginFrame();
+        //new AssistantFrame("assist");
     }
 }

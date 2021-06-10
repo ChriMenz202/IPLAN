@@ -31,6 +31,7 @@ public class StudentFrame {
     JTextArea courses = new JTextArea();
     CsvReader studentCourses;
     ArrayList<Course> compareList = new ArrayList<>();
+    String name;
 
     /**
      * create student object
@@ -39,6 +40,7 @@ public class StudentFrame {
      * @param loginDir = is the students login name; login name = direction of his storage in /res
      */
     public StudentFrame(String loginDir) {
+        this.name = loginDir;
 
         //create the correct dir if not exists
         this.path = path + "\\res\\" + loginDir;
@@ -249,9 +251,13 @@ public class StudentFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        String header = "Von "+name.toUpperCase(Locale.ROOT)+"\n";
+        new  CsvWriter(f,header);
         for (String line : courses.getText().split("\n")) {
             new CsvWriter(f, line);
         }
+        String message = "--------------------------------------------------------------------------------";
+        new  CsvWriter(f,message);
     }
 
     /**
