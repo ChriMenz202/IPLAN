@@ -6,34 +6,31 @@
  */
 
 package gui;
+
+import compare.Course;
+import compare.DayCompare;
 import data.CsvReader;
 import data.CsvWriter;
 import data.Value;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
  * if the login data match with a student call this class
  */
 public class StudentFrame {
-
-
-
     File f;
     String path = System.getProperty("user.dir");
     JTextArea course = new JTextArea();
     JTextField courseField = new JTextField();
     JTextArea courses = new JTextArea();
     CsvReader studentCourses;
-
+    ArrayList<Course> compareList = new ArrayList<>();
 
     /**
      * create student object
@@ -69,32 +66,10 @@ public class StudentFrame {
         course.setEditable(false);
         course.setBounds(10, 10, 300, 435);
         course.setVisible(true);
-        course.append("Course  Day  Time  Room\n\n");
         Value.frame.getContentPane().add(course);
 
-
-        //TODO SORT DAYS
         //TODO TIME MATCH QUERY
-
-
-        /*
-           compare 1 element of students course with all courses
-            if the course exist print course infos
-         */
-
-        for (int i = 0; i < studentCourses.getData().size(); i++) {
-            String tempCourse = String.valueOf(studentCourses.getData().get(i));
-            for (int j = 0; j < Value.allCourses.getData().size(); j++) {
-                String tempCompare = String.valueOf(Value.allCourses.getData().get(j).split(";")[0]);
-                if (String.valueOf(tempCourse).equals(String.valueOf(tempCompare))) {
-                    String[] tempLine = Value.allCourses.getData().get(j).split(";");
-                    for (int t = 0; t < tempLine.length; t++) {
-                        course.append(tempLine[t]+";");
-                    }
-                    course.append("\n");
-                }
-            }
-        }
+        addStudentCourses();
 
         JButton addCourse = new JButton("Kurse");
         addCourse.setBounds(320, 10, 155, 28);
@@ -102,109 +77,138 @@ public class StudentFrame {
         addCourse.setBackground(Color.WHITE);
         addCourse.setForeground(Color.BLACK);
         addCourse.setFocusPainted(false);
-        addCourse.addActionListener(new ActionListener() {
+        //student can sign in in courses
+        addCourse.addActionListener(e -> {
+            JFrame frame = new JFrame();
+            frame.setSize(500, 500);
+            frame.setTitle("Kurse");
+            frame.setLayout(null);
+            frame.setLocation(1000, 270);
+            frame.setUndecorated(true);
+            frame.setResizable(false);
+            frame.setVisible(true);
 
-            //student can sign in in courses
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame frame = new JFrame();
-                frame.setSize(500, 500);
-                frame.setTitle("Kurse");
-                frame.setLayout(null);
-                frame.setLocation(1000,270);
-                frame.setUndecorated(true);
-                frame.setResizable(false);
-                frame.setVisible(true);
+            courseField = new JTextField();
+            JLabel jLabel = new JLabel("Wähle einen Kurs");
+            courseField.setBounds(320, 10, 155, 28);
+            jLabel.setBounds(350, 35, 150, 28);
+            frame.getContentPane().add(courseField);
+            frame.getContentPane().add(jLabel);
 
-                courseField = new JTextField();
-                JLabel jLabel = new JLabel("Wähle einen Kurs");
-                courseField.setBounds(320,10,155,28);
-                jLabel.setBounds(350,35,150,28);
-                frame.getContentPane().add(courseField);
-                frame.getContentPane().add(jLabel);
+            courses = new JTextArea();
+            courses.setLineWrap(true);
+            courses.setWrapStyleWord(true);
+            courses.setEditable(false);
+            courses.setBounds(10, 10, 300, 435);
+            courses.setVisible(true);
+            courses.append("Kurse:\n\n");
+            frame.getContentPane().add(courses);
 
 
-                courses = new JTextArea();
-                courses.setLineWrap(true);
-                courses.setWrapStyleWord(true);
-                courses.setEditable(false);
-                courses.setBounds(10, 10, 300, 435);
-                courses.setVisible(true);
-                courses.append("Course:\n\n");
-                frame.getContentPane().add(courses);
-
-                for (int i = 0; i < Value.allCourses.getData().size(); i++) {
-                    String[] temp = Value.allCourses.getData().get(i).split(";");
-                    for (int j = 0; j < temp.length; j++) {
-                        courses.append(temp[j] + ";");
-                    }
-                    courses.append("\n");
+            for (int i = 0; i < Value.allCourses.getData().size(); i++) {
+                String[] temp = Value.allCourses.getData().get(i).split(";");
+                for (String s : temp) {
+                    courses.append(s + ";");
                 }
-                JButton addCourse = new JButton("Kurs beitreten");
-                addCourse.setBounds(320, 80, 155, 28);
-                addCourse.setVisible(true);
-                addCourse.setBackground(Color.WHITE);
-                addCourse.setForeground(Color.BLACK);
-                addCourse.setFocusPainted(false);
-                addCourse.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        courseExist();
-                        //TODO
-                    }
-                });
-                frame.getContentPane().add(addCourse);
-
-                JButton exit = new JButton("schließen");
-                exit.setBounds(320, 417, 155, 28);
-                exit.setVisible(true);
-                exit.setBackground(Color.WHITE);
-                exit.setForeground(Color.BLACK);
-                exit.setFocusPainted(false);
-                exit.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        frame.setVisible(false);
-                    }
-                });
-                frame.getContentPane().add(exit);
-                frame.setVisible(true);
+                courses.append("\n");
             }
+            JButton addCourse1 = new JButton("Kurs beitreten");
+            addCourse1.setBounds(320, 80, 155, 28);
+            addCourse1.setVisible(true);
+            addCourse1.setBackground(Color.WHITE);
+            addCourse1.setForeground(Color.BLACK);
+            addCourse1.setFocusPainted(false);
+            addCourse1.addActionListener(e1 -> courseExist());
+            frame.getContentPane().add(addCourse1);
+
+            JButton exit = new JButton("schließen");
+            exit.setBounds(320, 417, 155, 28);
+            exit.setVisible(true);
+            exit.setBackground(Color.WHITE);
+            exit.setForeground(Color.BLACK);
+            exit.setFocusPainted(false);
+            exit.addActionListener(e12 -> frame.setVisible(false));
+            frame.getContentPane().add(exit);
+            frame.setVisible(true);
         });
+
+        JButton message = new JButton("Ticket");
+        message.setBounds(320, 50, 155, 28);
+        message.setVisible(true);
+        message.setBackground(Color.WHITE);
+        message.setForeground(Color.BLACK);
+        message.setFocusPainted(false);
+        message.addActionListener(e -> {
+
+            JFrame frame = new JFrame();
+            frame.setSize(500, 500);
+            frame.setTitle("Kurse");
+            frame.setLayout(null);
+            frame.setLocation(1000, 270);
+            frame.setUndecorated(true);
+            frame.setResizable(false);
+            frame.setVisible(true);
+
+            JLabel label = new JLabel("Nachricht an den Admin");
+            label.setBounds(20, 10, 200, 40);
+            frame.getContentPane().add(label);
+
+            courses = new JTextArea();
+            courses.setLineWrap(true);
+            courses.setWrapStyleWord(true);
+            courses.setEditable(true);
+            courses.setBounds(10, 40, 300, 435);
+            courses.setVisible(true);
+            frame.getContentPane().add(courses);
+
+            JButton send = new JButton("Nachricht Senden");
+            send.setBounds(320, 448, 155, 28);
+            send.setVisible(true);
+            send.setBackground(Color.WHITE);
+            send.setForeground(Color.BLACK);
+            send.setFocusPainted(false);
+            send.addActionListener(e13 -> {
+                sendMessage();
+                frame.setVisible(false);
+            });
+            frame.getContentPane().add(send);
+        });
+
+        Value.frame.getContentPane().add(message);
+
         JButton exit = new JButton("Logout");
         exit.setBounds(320, 417, 155, 28);
         exit.setVisible(true);
         exit.setBackground(Color.WHITE);
         exit.setForeground(Color.BLACK);
         exit.setFocusPainted(false);
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Value.frame.setVisible(false);
-                Value.frame.setVisible(false);
-                new LoginFrame();
-            }
+        exit.addActionListener(e -> {
+            Value.frame.setVisible(false);
+            Value.frame.setVisible(false);
+            new LoginFrame();
         });
         Value.frame.getContentPane().add(exit);
         Value.frame.getContentPane().add(addCourse);
         Value.frame.setVisible(true);
     }
 
-    public void courseExist(){
+    /**
+     * checks if the course exists or if you are already in there
+     */
+    public void courseExist() {
         String chose = courseField.getText().toUpperCase(Locale.ROOT);
         boolean check = true;
         boolean exist = true;
         String set = "";
         for (int i = 0; i < Value.allCourses.getData().size(); i++) {
-            if(chose.equals(Value.allCourses.getData().get(i).split(";")[0])){
+            if (chose.equals(Value.allCourses.getData().get(i).split(";")[0])) {
                 exist = true;
                 break;
-            }else{
+            } else {
                 exist = false;
             }
         }
-        if (exist == false){
+        if (!exist) {
             JOptionPane.showMessageDialog(null, "Dieser Kurs existiert nicht!", "Achtung", JOptionPane.INFORMATION_MESSAGE);
         }
         for (int i = 0; i < studentCourses.getData().size(); i++) {
@@ -215,20 +219,68 @@ public class StudentFrame {
                 check = false;
             }
         }
-        if (check && exist){
+        if (check && exist) {
             for (int i = 0; i < Value.allCourses.getData().size(); i++) {
-                if(chose.equals(String.valueOf(Value.allCourses.getData().get(i).split(";")[0]))){
-                    set= Value.allCourses.getData().get(i);
+                if (chose.equals(String.valueOf(Value.allCourses.getData().get(i).split(";")[0]))) {
+                    set = Value.allCourses.getData().get(i);
                 }
             }
             studentCourses.setData(chose);
-            CsvWriter c = new CsvWriter(f,chose);
+            new CsvWriter(f, chose);
             String[] temp = set.split(";");
-            for (int i = 0; i < temp.length; i++) {
-                course.append(temp[i]+"    ");
+            for (String s : temp) {
+                course.append(s + "    ");
             }
             course.append("\n");
         }
     }
 
+    /**
+     * Send messages to the admin (messages.txt)
+     */
+    public void sendMessage() {
+        path = System.getProperty("user.dir");
+        path = path + "\\res\\admin\\messages.txt";
+        f = new File(path);
+        try {
+            if (!f.exists()) {
+                f.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (String line : courses.getText().split("\n")) {
+            new CsvWriter(f, line);
+        }
+    }
+
+    /**
+     * compare 1 element of students course with all courses
+     * if the course exist print course infos
+     */
+    public void addStudentCourses() {
+        course.setText("");
+        for (int i = 0; i < studentCourses.getData().size(); i++) {
+            String tempCourse = String.valueOf(studentCourses.getData().get(i));
+            for (int j = 0; j < Value.allCourses.getData().size(); j++) {
+                String tempCompare = String.valueOf(Value.allCourses.getData().get(j).split(";")[0]);
+                if (String.valueOf(tempCourse).equals(String.valueOf(tempCompare))) {
+                    String[] tempLine = Value.allCourses.getData().get(j).split(";");
+                    Course c = new Course(tempLine[0], tempLine[1], tempLine[2], tempLine[3], tempLine[4]);
+                    compareList.add(c);
+
+                }
+            }
+        }
+        comparing();
+    }
+
+    public void comparing() {
+        DayCompare dc = new DayCompare();
+        compareList.sort(dc);
+        for (Course c : compareList) {
+            course.append(c.getDay() + "   " + c.getName() + "   " + c.getTime() + "   " + c.getRoom() + "   " + c.getTeacher());
+            course.append("\n");
+        }
+    }
 }

@@ -1,6 +1,6 @@
 /*Project: IPLAN
  *Package: PACKAGE_NAME
- *Description:
+ *Description: main class access point of the program
  *Author: Christoph Menzinger
  *Last Change:  04.06.2021
  */
@@ -19,9 +19,9 @@ import gui.StudentFrame;
  */
 
 public class Application {
-    public static void main(String[] args){
-        new AdminFrame("admin");
-     //  new StudentFrame("student");
-//        new LoginFrame();
+    public static void main(String[] args) {
+        //new AdminFrame("admin");
+//        new StudentFrame("student");
+        new LoginFrame();
     }
 }

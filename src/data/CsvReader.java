@@ -14,31 +14,24 @@ public class CsvReader {
 
     ArrayList<String> data = new ArrayList<>();
 
-
     /**
      * @param filePath relative path of file you want to read in
-     *
-     * Reads a csv-file and puts the lines in an ArrayList for continuing editing
-     *
+     *                 <p>
+     *                 Reads a csv-file and puts the lines in an ArrayList for continuing editing
      */
     public CsvReader(String filePath) {
-        BufferedReader bufferedReader = null;
+        BufferedReader bufferedReader;
         String singleLine;
         String current = System.getProperty("user.dir");
-        File file = new File(current,filePath);
+        File file = new File(current, filePath);
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
-            while ((singleLine = bufferedReader.readLine()) != null){
+            while ((singleLine = bufferedReader.readLine()) != null) {
                 this.data.add(singleLine);
             }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public ArrayList<String> getData() {

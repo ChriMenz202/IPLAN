@@ -1,6 +1,6 @@
 /*Project: IPLAN
  *Package: data
- *Description:
+ *Description: class for writing in files
  *Author: Christoph Menzinger
  *Last Change:  05.06.2021
  */
@@ -14,11 +14,11 @@ import java.io.IOException;
 
 public class CsvWriter {
 
-    public CsvWriter(File file, String line){
+    public CsvWriter(File file, String line) {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new FileWriter(file.getPath(),true));
-            bw.write(line+"\n");
+            bw = new BufferedWriter(new FileWriter(file.getPath(), true));
+            bw.write(line + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -26,7 +26,7 @@ public class CsvWriter {
                 bw.flush();
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 try {
                     bw.close();
                 } catch (IOException e) {

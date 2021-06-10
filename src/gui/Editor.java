@@ -1,6 +1,6 @@
 /*Project: IPLAN
  *Package: data
- *Description:
+ *Description: editing with Gui and change the associated file
  *Author: Christoph Menzinger
  *Last Change:  05.06.2021
  */
@@ -13,8 +13,6 @@ import data.Value;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -59,30 +57,26 @@ public class Editor {
                 for (int i = 0; i < Value.rooms.getData().size(); i++) {
                     field.append(Value.rooms.getData().get(i) + "\n");
                 }
-                save.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if(checkRooms() && uniqueCheck()) {
-                            String current = System.getProperty("user.dir");
-                            File f = new File(current, path);
-                            try {
-                                FileWriter w = new FileWriter(f);
-                                w.close();
-                            } catch (IOException ioException) {
-                                ioException.printStackTrace();
-                            }
-                            for (String line : field.getText().split("\n")) {
-                                CsvWriter c = new CsvWriter(f, line);
-                            }
-
-                            refillLists("/res/rooms.csv");
-
-                            Value.frame.setVisible(false);
-                            new AdminFrame("ADMIN");
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Ihre Eingabe ist nicht korrekt, Raum muss folgend eingegeben werden \"R[1-9]\"", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+                save.addActionListener(e -> {
+                    if (checkRooms() && uniqueCheck()) {
+                        String current = System.getProperty("user.dir");
+                        File f = new File(current, path);
+                        try {
+                            FileWriter w = new FileWriter(f);
+                            w.close();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
                         }
+                        for (String line : field.getText().split("\n")) {
+                            new CsvWriter(f, line);
+                        }
+
+                        refillLists("/res/rooms.csv");
+
+                        Value.frame.setVisible(false);
+                        new AdminFrame("ADMIN");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ihre Eingabe ist nicht korrekt, Raum muss folgend eingegeben werden \"R[1-9]\"", "Achtung", JOptionPane.INFORMATION_MESSAGE);
                     }
                 });
                 Value.frame.getContentPane().add(save);
@@ -92,35 +86,28 @@ public class Editor {
                 for (int i = 0; i < Value.allCourses.getData().size(); i++) {
                     field.append(Value.allCourses.getData().get(i) + "\n");
                 }
-                save.addActionListener(new ActionListener() {
+                save.addActionListener(e -> {
 
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        try {
-                            if (checkTimeSpan() && checkMinutes() && checkroomsExist() && checkDate() && compareRoomCourse() && checkHours() && uniqueCheck()) {
-                                String current = System.getProperty("user.dir");
-                                File f = new File(current, path);
-                                try {
-                                    FileWriter w = new FileWriter(f);
-                                    w.close();
-                                } catch (IOException ioException) {
-                                    ioException.printStackTrace();
-                                }
-                                for (String line : field.getText().split("\n")) {
-                                    CsvWriter c = new CsvWriter(f, line);
-                                }
-                                refillLists("/res/Courses.csv");
-
-
-                                Value.frame.setVisible(false);
-                                new AdminFrame("ADMIN");
-                            } else {
-
+                    try {
+                        if (checkTimeSpan() && checkMinutes() && checkroomsExist() && checkDate() && compareRoomCourse() && checkHours() && uniqueCheck()) {
+                            String current = System.getProperty("user.dir");
+                            File f = new File(current, path);
+                            try {
+                                FileWriter w = new FileWriter(f);
+                                w.close();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
                             }
-                        }catch (ArrayIndexOutOfBoundsException ex){
-                            JOptionPane.showMessageDialog(null, "Die Eingabe ist nicht Korrekt!\n Halten Sie sich an die Vorgaben!\n");
+                            for (String line : field.getText().split("\n")) {
+                                new CsvWriter(f, line);
+                            }
+                            refillLists("/res/Courses.csv");
+
+                            Value.frame.setVisible(false);
+                            new AdminFrame("ADMIN");
                         }
+                    } catch (ArrayIndexOutOfBoundsException ex) {
+                        JOptionPane.showMessageDialog(null, "Die Eingabe ist nicht Korrekt!\n Halten Sie sich an die Vorgaben!\n");
                     }
                 });
                 Value.frame.getContentPane().add(save);
@@ -130,33 +117,27 @@ public class Editor {
                 for (int i = 0; i < Value.users.getData().size(); i++) {
                     field.append(Value.users.getData().get(i) + "\n");
                 }
-                save.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            if (checkUser() && uniqueCheck()) {
-                                String current = System.getProperty("user.dir");
-                                File f = new File(current, path);
-                                try {
-                                    FileWriter w = new FileWriter(f);
-                                    w.close();
-                                } catch (IOException ioException) {
-                                    ioException.printStackTrace();
-                                }
-                                for (String line : field.getText().split("\n")) {
-                                    CsvWriter c = new CsvWriter(f, line);
-                                }
-                                refillLists("/res/UserList.csv");
-
-                                Value.frame.setVisible(false);
-                                new AdminFrame("ADMIN");
-                            } else {
-
+                save.addActionListener(e -> {
+                    try {
+                        if (checkUser() && uniqueCheck()) {
+                            String current = System.getProperty("user.dir");
+                            File f = new File(current, path);
+                            try {
+                                FileWriter w = new FileWriter(f);
+                                w.close();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
                             }
-                      }catch (ArrayIndexOutOfBoundsException ae){
-                                JOptionPane.showMessageDialog(null, "Eingabe nicht Korrekt\n Keine Rolle vergeben!\n");
+                            for (String line : field.getText().split("\n")) {
+                                new CsvWriter(f, line);
+                            }
+                            refillLists("/res/UserList.csv");
+
+                            Value.frame.setVisible(false);
+                            new AdminFrame("ADMIN");
                         }
+                    } catch (ArrayIndexOutOfBoundsException ae) {
+                        JOptionPane.showMessageDialog(null, "Eingabe nicht Korrekt\n Keine Rolle vergeben!\n");
                     }
                 });
                 Value.frame.getContentPane().add(save);
@@ -166,28 +147,28 @@ public class Editor {
     }
 
     /**
-     *delete Value.<lists> and empty the associated file
+     * delete Value.<lists> and empty the associated file
      *
      * @param directory of the file which gets deleted
      */
-    public void refillLists(String directory){
+    public void refillLists(String directory) {
         CsvReader c;
         switch (directory) {
             case "/res/UserList.csv" -> {
                 for (int i = 0; i < Value.users.getData().size(); i++) {
-                Value.users.getData().remove(i);
+                    Value.users.getData().remove(i);
                 }
-                 c = new CsvReader(directory);
+                c = new CsvReader(directory);
                 Value.users = c;
             }
             case "/res/Courses.csv" -> {
                 for (int i = 0; i < Value.allCourses.getData().size(); i++) {
                     Value.allCourses.getData().remove(i);
                 }
-                 c = new CsvReader(directory);
+                c = new CsvReader(directory);
                 Value.allCourses = c;
             }
-            case "/res/rooms.csv" ->{
+            case "/res/rooms.csv" -> {
                 for (int i = 0; i < Value.rooms.getData().size(); i++) {
                     Value.rooms.getData().remove(i);
                 }
@@ -199,15 +180,16 @@ public class Editor {
 
     /**
      * check if inputs in roomEditor are correct
+     *
      * @return boolean true or false
-     *         false JOptionPane
+     * false JOptionPane
      */
-    public boolean checkRooms(){
+    public boolean checkRooms() {
         boolean checked = false;
-        for (String line: field.getText().split("\n")) {
-            if (line.matches("R[0-9]*")){
+        for (String line : field.getText().split("\n")) {
+            if (line.matches("R[0-9]*")) {
                 checked = true;
-            }else{
+            } else {
                 checked = false;
                 break;
             }
@@ -217,22 +199,23 @@ public class Editor {
 
     /**
      * checks if the minuets is 0
+     *
      * @return ture if all minutes are correct
-     *         false JOptionPane
-     *@throws ArrayIndexOutOfBoundsException to catch wrong inputs
+     * false JOptionPane
+     * @throws ArrayIndexOutOfBoundsException to catch wrong inputs
      */
-    public boolean checkMinutes()throws ArrayIndexOutOfBoundsException{
+    public boolean checkMinutes() throws ArrayIndexOutOfBoundsException {
         boolean checked = false;
-        for (String line: field.getText().split("\n")) {
+        for (String line : field.getText().split("\n")) {
             String[] temp = line.split(";");
             String[] i = (temp[2].split("-"));
             int from = Integer.parseInt(i[0].split(":")[1]);
             int to = Integer.parseInt(i[1].split(":")[1]);
-            if (from != 0 || to !=0){
+            if (from != 0 || to != 0) {
                 checked = false;
                 JOptionPane.showMessageDialog(null, "Eingegebene Zeit ist nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
                 break;
-            }else{
+            } else {
                 checked = true;
             }
         }
@@ -241,22 +224,23 @@ public class Editor {
 
     /**
      * checks if the courses between 8 and 22:59
+     *
      * @return ture if all courses are correct
-     *         false JOptionPane
-     *@throws ArrayIndexOutOfBoundsException to catch wrong inputs
+     * false JOptionPane
+     * @throws ArrayIndexOutOfBoundsException to catch wrong inputs
      */
-    public boolean checkTimeSpan() throws ArrayIndexOutOfBoundsException{
+    public boolean checkTimeSpan() throws ArrayIndexOutOfBoundsException {
         boolean checked = false;
-        for (String line: field.getText().split("\n")) {
+        for (String line : field.getText().split("\n")) {
             String[] temp = line.split(";");
             String[] i = (temp[2].split("-"));
             int from = Integer.parseInt(i[0].split(":")[0]);
             int to = Integer.parseInt(i[1].split(":")[0]);
-            if (from < 8 || from >= 23 || (to >= 23 || to < 8)){
+            if (from < 8 || from >= 23 || (to >= 23 || to < 8)) {
                 checked = false;
                 JOptionPane.showMessageDialog(null, "Eingegebene Zeit ist nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
                 break;
-            }else{
+            } else {
                 checked = true;
             }
         }
@@ -267,29 +251,30 @@ public class Editor {
      * checks every room-index in Courses
      * int counter = founded room which matches one in the roomlist
      * int field = each room in Courses
+     *
      * @return true when all rooms in courses matches rooms in the roomList
-     *         false JOptionPane
+     * false JOptionPane
      */
-    public boolean checkroomsExist(){
+    public boolean checkroomsExist() {
         int counter = 0;
         int linesInField = 0;
-        for (String line: field.getText().split("\n")) {
+        for (String line : field.getText().split("\n")) {
             String room = line.split(";")[3];
             linesInField++;
-            for (String rooms : Value.rooms.getData()){
-                if(room.equals(rooms)){
+            for (String rooms : Value.rooms.getData()) {
+                if (room.equals(rooms)) {
                     counter++;
                 }
             }
         }
-        if(counter == linesInField){
+        if (counter == linesInField) {
             return true;
-        }else{
-            String options = "";
-            for (String line:Value.rooms.getData()) {
-                options+=line +" ";
+        } else {
+            StringBuilder options = new StringBuilder();
+            for (String line : Value.rooms.getData()) {
+                options.append(line).append(" ");
             }
-             JOptionPane.showMessageDialog(null,"Ein angegebener Raum existiert nicht\n" + "Wähle aus den folgenden: \n" + options);
+            JOptionPane.showMessageDialog(null, "Ein angegebener Raum existiert nicht\n" + "Wähle aus den folgenden: \n" + options);
             return false;
         }
     }
@@ -298,37 +283,37 @@ public class Editor {
      * checks every day-index in Courses
      * int counter = founded day which matches one in the day-array
      * int field = each day in Courses
+     *
      * @return true when all days in courses matches days in the array
-     *         false JOptionPane
+     * false JOptionPane
      */
-    public boolean checkDate(){
-        String[] days = {"Mo","Di","Mi","Do","Fr"};
+    public boolean checkDate() {
+        String[] days = {"Mo", "Di", "Mi", "Do", "Fr"};
         String allDays = "Mo; Di; Mi; Do; Fr";
         int counter = 0;
         int linesInField = 0;
-        for (String line: field.getText().split("\n")) {
+        for (String line : field.getText().split("\n")) {
             String day = line.split(";")[1];
             linesInField++;
-            for (String d : days){
-                if(d.equals(day)){
+            for (String d : days) {
+                if (d.equals(day)) {
                     counter++;
                 }
             }
         }
-        if(linesInField == counter){
+        if (linesInField == counter) {
             return true;
-        }else {
-            JOptionPane.showMessageDialog(null,"Eingegebener Tag nicht korrekt\n Wähle einen der folgenend Tage aus:\n" + allDays);
+        } else {
+            JOptionPane.showMessageDialog(null, "Eingegebener Tag nicht korrekt\n Wähle einen der folgenend Tage aus:\n" + allDays);
             return false;
         }
     }
 
     /**
-     *
-     * @return
+     * @return true if there is no redundancies
      * @throws ArrayIndexOutOfBoundsException to catch wrong inputs
      */
-    public boolean compareRoomCourse() throws ArrayIndexOutOfBoundsException{
+    public boolean compareRoomCourse() throws ArrayIndexOutOfBoundsException {
         boolean check = true;
         for (int i = 0; i < field.getText().split("\n").length; i++) {
             String line = field.getText().split("\n")[i];
@@ -342,7 +327,7 @@ public class Editor {
                 String compareDay = input.split(";")[1];
                 String compareRoom = input.split(";")[3];
                 String compareHourFrom = input.split(";")[2].split("-")[0].split(":")[0];
-                if (day.equals(compareDay) && room.equals(compareRoom) && (hourFrom.equals(compareHourFrom) || Integer.valueOf(compareHourFrom) <= Integer.valueOf(hourTo))) {
+                if (day.equals(compareDay) && room.equals(compareRoom) && (hourFrom.equals(compareHourFrom) || Integer.parseInt(compareHourFrom) <= Integer.parseInt(hourTo))) {
                     JOptionPane.showMessageDialog(null, "Die eingegebenen Zeitfenster überschneiden sich mit den Räumen!\n Überprüfen sie ihre Eingabe!\n");
                     check = false;
                     break;
@@ -357,12 +342,12 @@ public class Editor {
      *
      * @return ture if hour one is less than hour two
      */
-    public boolean checkHours(){
+    public boolean checkHours() {
         boolean checked = true;
-        for (String line: field.getText().split("\n")) {
+        for (String line : field.getText().split("\n")) {
             int hourFrom = Integer.parseInt(line.split(";")[2].split("-")[0].split(":")[0]);
             int hourTo = Integer.parseInt(line.split(";")[2].split("-")[1].split(":")[0]);
-            if(hourTo <= hourFrom){
+            if (hourTo <= hourFrom) {
                 checked = false;
                 JOptionPane.showMessageDialog(null, "Die Zeiteingabe ist nicht Korrekt\n Überprüfen sie ihre Studen-Eingabe!\n");
             }
@@ -372,36 +357,43 @@ public class Editor {
 
     /**
      * checkes if the given role exist
+     *
      * @return true if all users in UserList are in a existing role
-     * @throws ArrayIndexOutOfBoundsException
+     * @throws ArrayIndexOutOfBoundsException if line is wrong
      */
-    public boolean checkUser() throws ArrayIndexOutOfBoundsException{
+    public boolean checkUser() throws ArrayIndexOutOfBoundsException {
         boolean checked = true;
-        for (String line: field.getText().split("\n")) {
+        for (String line : field.getText().split("\n")) {
             String[] input = line.split(";");
-            if(!(input[2].matches("isAdmin")) && !(input[2].matches("isStudent")) && !(input[2].matches("isAssist"))){
+            int length = input.length - 1;
+            if (!(input[length].matches("isAdmin")) && !(input[length].matches("isStudent")) && !(input[length].matches("isAssist"))) {
                 checked = false;
+                break;
             }
+        }
+        if (!checked) {
+            JOptionPane.showMessageDialog(null, "Die Eingaben sind nicht Korrekt\n Überprüfen sie die Konvention!\n");
         }
         return checked;
     }
 
     /**
      * compares each element with each other to check redundancies
-     * @return
+     *
+     * @return true if there is every course unique
      */
-    public boolean uniqueCheck(){
+    public boolean uniqueCheck() {
         boolean check = true;
-        for (int j = 0; j < field.getText().split("\n").length;j++) {
-            String line =  field.getText().split("\n")[j];
-            for (int i = j+1; i < field.getText().split("\n").length; i++) {
+        for (int j = 0; j < field.getText().split("\n").length; j++) {
+            String line = field.getText().split("\n")[j];
+            for (int i = j + 1; i < field.getText().split("\n").length; i++) {
                 String checkLine = field.getText().split("\n")[i];
-                if(line.equals(checkLine)){
+                if (line.equals(checkLine)) {
                     check = false;
                     JOptionPane.showMessageDialog(null, "Achtung Redundanzen!\n Überprüfen sie ihre Eingaben!\n");
                 }
             }
-            }
-        return check;
         }
+        return check;
+    }
 }

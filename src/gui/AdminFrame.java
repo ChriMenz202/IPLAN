@@ -11,28 +11,25 @@ import data.Value;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import java.util.Locale;
 
-public class AdminFrame{
+public class AdminFrame {
 
-/**
- * create student object
- * students can see all courses and can sign up to other courses
- *
- * @param loginDir = is the students login name; login name = direction of his storage in /res
- */
-public AdminFrame(String loginDir){
+    /**
+     * create student object
+     * students can see all courses and can sign up to other courses
+     * editing takes place in Editor.class
+     *
+     * @param loginDir = is the students login name; login name = direction of his storage in /res
+     */
+    public AdminFrame(String loginDir) {
 
-        Value.frame=new JFrame();
-        Value.frame.setSize(500,500);
+        Value.frame = new JFrame();
+        Value.frame.setSize(500, 500);
         Value.frame.setTitle(loginDir.toUpperCase(Locale.ROOT));
         Value.frame.setLayout(null);
         Value.frame.setLocationRelativeTo(null);
         Value.frame.setResizable(false);
-
 
         //save button
         JButton save = new JButton("Speichern");
@@ -41,12 +38,9 @@ public AdminFrame(String loginDir){
         save.setBackground(Color.WHITE);
         save.setForeground(Color.BLACK);
         save.setFocusPainted(false);
-        save.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                        Value.frame.setVisible(false);
-                        new LoginFrame();
-                }
+        save.addActionListener(e -> {
+            Value.frame.setVisible(false);
+            new LoginFrame();
         });
         Value.frame.getContentPane().add(save);
 
@@ -56,12 +50,9 @@ public AdminFrame(String loginDir){
         rooms.setBackground(Color.WHITE);
         rooms.setForeground(Color.BLACK);
         rooms.setFocusPainted(false);
-        rooms.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                        Value.frame.setVisible(false);
-                        new Editor("/res/rooms.csv");
-                }
+        rooms.addActionListener(e -> {
+            Value.frame.setVisible(false);
+            new Editor("/res/rooms.csv");
         });
 
         Value.frame.getContentPane().add(rooms);
@@ -72,12 +63,9 @@ public AdminFrame(String loginDir){
         courses.setBackground(Color.WHITE);
         courses.setForeground(Color.BLACK);
         courses.setFocusPainted(false);
-        courses.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                        Value.frame.setVisible(false);
-                        new Editor("/res/Courses.csv");
-                }
+        courses.addActionListener(e -> {
+            Value.frame.setVisible(false);
+            new Editor("/res/Courses.csv");
         });
 
         Value.frame.getContentPane().add(courses);
@@ -88,17 +76,13 @@ public AdminFrame(String loginDir){
         users.setBackground(Color.WHITE);
         users.setForeground(Color.BLACK);
         users.setFocusPainted(false);
-        users.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                        Value.frame.setVisible(false);
-                        new Editor("/res/UserList.csv");
-                }
+        users.addActionListener(e -> {
+            Value.frame.setVisible(false);
+            new Editor("/res/UserList.csv");
         });
 
         Value.frame.getContentPane().add(users);
 
-
         Value.frame.setVisible(true);
-        }
+    }
 }
