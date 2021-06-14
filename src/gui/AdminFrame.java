@@ -7,7 +7,6 @@
 
 package gui;
 
-import data.Messages;
 import data.Value;
 
 import javax.swing.*;

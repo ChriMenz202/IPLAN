@@ -14,6 +14,11 @@ import java.io.IOException;
 
 public class CsvWriter {
 
+    /**
+     * Writes in a csv file
+     * @param file we want to write in
+     * @param line string we want to write in the file
+     */
     public CsvWriter(File file, String line) {
         BufferedWriter bw = null;
         try {
@@ -23,6 +28,7 @@ public class CsvWriter {
             e.printStackTrace();
         } finally {
             try {
+                assert bw != null;
                 bw.flush();
             } catch (IOException e) {
                 e.printStackTrace();

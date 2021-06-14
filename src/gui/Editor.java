@@ -9,7 +9,6 @@ package gui;
 
 import data.*;
 
-import javax.print.attribute.standard.NumberOfInterveningJobs;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -51,7 +50,6 @@ public class Editor {
         save.setBackground(Color.WHITE);
         save.setForeground(Color.BLACK);
         save.setFocusPainted(false);
-
 
 
         switch (path) {
@@ -108,9 +106,7 @@ public class Editor {
                             Value.frame.setVisible(false);
                             new AdminFrame("ADMIN");
                         }
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                        JOptionPane.showMessageDialog(null, "Die Eingabe ist nicht Korrekt!\n Halten Sie sich an die Vorgaben!\n");
-                    }catch (NumberFormatException asd){
+                    } catch (ArrayIndexOutOfBoundsException | NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "Die Eingabe ist nicht Korrekt!\n Halten Sie sich an die Vorgaben!\n");
                     }
                 });
@@ -145,21 +141,21 @@ public class Editor {
                 edit.setForeground(Color.BLACK);
                 edit.setFocusPainted(false);
                 edit.addActionListener(e -> {
-                    if(role.getText().equals("")){
+                    if (role.getText().equals("")) {
                         JOptionPane.showMessageDialog(null, "Keine Eingabe getätigt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
-                    }else{
+                    } else {
                         boolean fail = false;
                         for (String line : Value.users.getData()) {
-                            if(role.getText().equals(line.split(";")[0]) && line.split(";")[2].equals("isStudent")){
+                            if (role.getText().equals(line.split(";")[0]) && line.split(";")[2].equals("isStudent")) {
                                 Value.frame.setVisible(false);
-                                   new StudentData(role.getText());
-                                   fail = false;
-                                   break;
-                            }else{
+                                new StudentData(role.getText());
+                                fail = false;
+                                break;
+                            } else {
                                 fail = true;
                             }
                         }
-                        if(fail){
+                        if (fail) {
                             JOptionPane.showMessageDialog(null, "Eingabe nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
@@ -272,7 +268,7 @@ public class Editor {
                     checked = true;
                 }
             }
-        }catch (NumberFormatException asd){
+        } catch (NumberFormatException asd) {
             JOptionPane.showMessageDialog(null, "Eingegebene Zeit ist nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
         }
         return checked;

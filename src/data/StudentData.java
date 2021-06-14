@@ -9,7 +9,6 @@ package data;
 
 import compare.Course;
 import compare.DayCompare;
-import gui.AdminFrame;
 import gui.Editor;
 
 import javax.swing.*;
@@ -27,7 +26,7 @@ public class StudentData {
     String name;
     String path = System.getProperty("user.dir");
     File f;
-    ArrayList <Course> compareList = new ArrayList<>();
+    ArrayList<Course> compareList = new ArrayList<>();
 
     /**
      * Create an rework courses, rooms and userList by reading the given
@@ -36,7 +35,7 @@ public class StudentData {
      *
      * @param loginDir switch case for the path to rebuild the given file
      */
-    public StudentData(String loginDir){
+    public StudentData(String loginDir) {
 
         fileConnection(loginDir);
 
@@ -87,7 +86,7 @@ public class StudentData {
         delete.addActionListener(e -> {
             if (!(jf.getText().equals(""))) {
                 changeFile();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Bitte geben sie einen Kurs ein", "Achtung", JOptionPane.INFORMATION_MESSAGE);
             }
         });
@@ -97,7 +96,7 @@ public class StudentData {
 
     }
 
-    public void fileConnection(String loginDir){
+    public void fileConnection(String loginDir) {
         this.name = loginDir.toLowerCase(Locale.ROOT);
 
         //create the correct dir if not exists
@@ -113,11 +112,10 @@ public class StudentData {
         this.c = new CsvReader("/res/" + loginDir + "/course.csv");
     }
 
-    public void fillField(){
-        for (String c:c.getData()) {
+    public void fillField() {
+        for (String c : c.getData()) {
             System.out.println(c);
         }
-
 
         field.setText("");
         for (int i = 0; i < c.getData().size(); i++) {
@@ -143,33 +141,30 @@ public class StudentData {
         }
     }
 
-    public void changeFile(){
-        for (String f:c.getData()) {
-            if(f.equals(jf.getText().toUpperCase(Locale.ROOT))){
+    public void changeFile() {
+        for (String f : c.getData()) {
+            if (f.equals(jf.getText().toUpperCase(Locale.ROOT))) {
                 c.getData().remove(f);
                 break;
             }
-
         }
         field.setText("");
 
-            try {
-                FileWriter fw = new FileWriter(f,false);
-                fw.write("");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        for (String a:c.getData()) {
-            new CsvWriter(f,a);
-            for (String all:Value.allCourses.getData()) {
-                if (a.equals(all.split(";")[0])){
-                    Course c = new Course(all.split(";")[0], all.split(";")[1],all.split(";")[2], all.split(";")[3], all.split(";")[4]);
+        try {
+            FileWriter fw = new FileWriter(f, false);
+            fw.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (String a : c.getData()) {
+            new CsvWriter(f, a);
+            for (String all : Value.allCourses.getData()) {
+                if (a.equals(all.split(";")[0])) {
+                    Course c = new Course(all.split(";")[0], all.split(";")[1], all.split(";")[2], all.split(";")[3], all.split(";")[4]);
                     field.append(c.getDay() + "   " + c.getName() + "   " + c.getTime() + "   " + c.getRoom() + "   " + c.getTeacher());
                     field.append("\n");
                 }
             }
         }
-
-
     }
 }

@@ -1,6 +1,13 @@
+/*Project: IPLAN
+ *Package: data
+ *Description:
+ *Author: Christoph Menzinger
+ *Last Change:  11.06.2021
+ */
+
 package data;
 
-import gui.AdminFrame;
+
 import gui.Editor;
 
 import javax.swing.*;
@@ -9,19 +16,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/*Project: IPLAN
- *Package: data
- *Description:
- *Author: Christoph Menzinger
- *Last Change:  11.06.2021
- */
+
 public class Messages {
 
     TextArea message = new TextArea();
     CsvReader c;
     String path = System.getProperty("user.dir");
 
-    public Messages(String user){
+    public Messages(String user) {
         Value.frame = new JFrame();
         Value.frame.setSize(1000, 460);
         Value.frame.setTitle("Messages");
@@ -36,10 +38,10 @@ public class Messages {
         message.setVisible(true);
 
 
-        File f = new File(path,user);
+        File f = new File(path, user);
         c = new CsvReader(user);
-        for (String line: c.getData()) {
-            message.append(line+"\n");
+        for (String line : c.getData()) {
+            message.append(line + "\n");
         }
         Value.frame.getContentPane().add(message);
 
@@ -56,8 +58,8 @@ public class Messages {
         users.setForeground(Color.BLACK);
         users.setFocusPainted(false);
         users.addActionListener(e -> {
-            for (String line: message.getText().split("\n")) {
-                new CsvWriter(f,line);
+            for (String line : message.getText().split("\n")) {
+                new CsvWriter(f, line);
             }
             Value.frame.setVisible(false);
             new Editor("/res/UserList.csv");

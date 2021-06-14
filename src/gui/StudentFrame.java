@@ -253,8 +253,8 @@ public class StudentFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String header = "Von "+name.toUpperCase(Locale.ROOT)+"\n";
-        new  CsvWriter(f,header);
+        String header = "Von " + name.toUpperCase(Locale.ROOT) + "\n";
+        new CsvWriter(f, header);
         for (String line : courses.getText().split("\n")) {
             new CsvWriter(f, line);
         }
@@ -293,21 +293,21 @@ public class StudentFrame {
     }
 
     /**
-     *compare each time of courses and check time collision
+     * compare each time of courses and check time collision
      */
     public void appointmentCollision() {
         boolean flag = false;
         for (int i = 0; i < compareList.size(); i++) {
             for (int j = i + 1; j < compareList.size(); j++) {
                 if ((compareList.get(i).getDay().equals(compareList.get(j).getDay())) &&
-                        compareList.get(i).getTime().split("-")[0].split(":")[0].equals(compareList.get(j).getTime().split("-")[0].split(":")[0])){
-                    JOptionPane.showMessageDialog(null, "Ihre Termine Kollidieren,\nBitte Kontaktieren sie den Admin!\nKurs: "+compareList.get(i).getName()+"   "+compareList.get(j).getName(), "WARNUNG!", JOptionPane.INFORMATION_MESSAGE);
+                        compareList.get(i).getTime().split("-")[0].split(":")[0].equals(compareList.get(j).getTime().split("-")[0].split(":")[0])) {
+                    JOptionPane.showMessageDialog(null, "Ihre Termine Kollidieren,\nBitte Kontaktieren sie den Admin!\nKurs: " + compareList.get(i).getName() + "   " + compareList.get(j).getName(), "WARNUNG!", JOptionPane.INFORMATION_MESSAGE);
                     flag = true;
                     break;
-                }else if((compareList.get(i).getDay().equals(compareList.get(j).getDay())) &&
-                        (Integer.valueOf(compareList.get(i).getTime().split("-")[0].split(":")[0]) <= Integer.valueOf(compareList.get(j).getTime().split("-")[0].split(":")[0]) &&
-                        Integer.valueOf(compareList.get(i).getTime().split("-")[1].split(":")[0]) >= Integer.parseInt(compareList.get(j).getTime().split("-")[0].split(":")[0]))){
-                    JOptionPane.showMessageDialog(null, "Ihre Termine Kollidieren,\nBitte Kontaktieren sie den Admin!\nKurs: "+compareList.get(i).getName()+"   "+compareList.get(j).getName(), "WARNUNG!", JOptionPane.INFORMATION_MESSAGE);
+                } else if ((compareList.get(i).getDay().equals(compareList.get(j).getDay())) &&
+                        (Integer.parseInt(compareList.get(i).getTime().split("-")[0].split(":")[0]) <= Integer.parseInt(compareList.get(j).getTime().split("-")[0].split(":")[0]) &&
+                                Integer.parseInt(compareList.get(i).getTime().split("-")[1].split(":")[0]) >= Integer.parseInt(compareList.get(j).getTime().split("-")[0].split(":")[0]))) {
+                    JOptionPane.showMessageDialog(null, "Ihre Termine Kollidieren,\nBitte Kontaktieren sie den Admin!\nKurs: " + compareList.get(i).getName() + "   " + compareList.get(j).getName(), "WARNUNG!", JOptionPane.INFORMATION_MESSAGE);
                     flag = true;
                     break;
                 }

@@ -16,11 +16,10 @@ public class CsvReader {
 
     /**
      * @param filePath relative path of file you want to read in
-     *                 <p>
      *                 Reads a csv-file and puts the lines in an ArrayList for continuing editing
      */
     public CsvReader(String filePath) {
-        BufferedReader bufferedReader;
+        BufferedReader bufferedReader = null;
         String singleLine;
         String current = System.getProperty("user.dir");
         File file = new File(current, filePath);
@@ -31,6 +30,13 @@ public class CsvReader {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                assert bufferedReader != null;
+                bufferedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
