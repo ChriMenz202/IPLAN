@@ -7,11 +7,9 @@
 
 package gui;
 
-import data.CsvReader;
-import data.CsvWriter;
-import data.StudentData;
-import data.Value;
+import data.*;
 
+import javax.print.attribute.standard.NumberOfInterveningJobs;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -112,6 +110,8 @@ public class Editor {
                         }
                     } catch (ArrayIndexOutOfBoundsException ex) {
                         JOptionPane.showMessageDialog(null, "Die Eingabe ist nicht Korrekt!\n Halten Sie sich an die Vorgaben!\n");
+                    }catch (NumberFormatException asd){
+                        JOptionPane.showMessageDialog(null, "Die Eingabe ist nicht Korrekt!\n Halten Sie sich an die Vorgaben!\n");
                     }
                 });
                 Value.frame.getContentPane().add(save);
@@ -125,6 +125,19 @@ public class Editor {
                 Value.frame.getContentPane().add(role);
                 Value.frame.getContentPane().add(jLabel);
 
+                JButton message = new JButton("Nachrichten");
+                message.setBounds(320, 337, 155, 28);
+                message.setVisible(true);
+                message.setBackground(Color.WHITE);
+                message.setForeground(Color.BLACK);
+                message.setFocusPainted(false);
+                message.addActionListener(e -> {
+                    Value.frame.setVisible(false);
+                    new Messages("/res/admin/messages.txt");
+                });
+
+                Value.frame.getContentPane().add(message);
+
                 JButton edit = new JButton("Bearbeiten");
                 edit.setBounds(320, 377, 155, 28);
                 edit.setVisible(true);
@@ -135,10 +148,21 @@ public class Editor {
                     if(role.getText().equals("")){
                         JOptionPane.showMessageDialog(null, "Keine Eingabe getätigt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
                     }else{
-                        Value.frame.setVisible(false);
-                        new StudentData(role.getText());
+                        boolean fail = false;
+                        for (String line : Value.users.getData()) {
+                            if(role.getText().equals(line.split(";")[0]) && line.split(";")[2].equals("isStudent")){
+                                Value.frame.setVisible(false);
+                                   new StudentData(role.getText());
+                                   fail = false;
+                                   break;
+                            }else{
+                                fail = true;
+                            }
+                        }
+                        if(fail){
+                            JOptionPane.showMessageDialog(null, "Eingabe nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
-
                 });
                 Value.frame.getContentPane().add(edit);
 
@@ -234,18 +258,22 @@ public class Editor {
      */
     public boolean checkMinutes() throws ArrayIndexOutOfBoundsException {
         boolean checked = false;
-        for (String line : field.getText().split("\n")) {
-            String[] temp = line.split(";");
-            String[] i = (temp[2].split("-"));
-            int from = Integer.parseInt(i[0].split(":")[1]);
-            int to = Integer.parseInt(i[1].split(":")[1]);
-            if (from != 0 || to != 0) {
-                checked = false;
-                JOptionPane.showMessageDialog(null, "Eingegebene Zeit ist nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
-                break;
-            } else {
-                checked = true;
+        try {
+            for (String line : field.getText().split("\n")) {
+                String[] temp = line.split(";");
+                String[] i = (temp[2].split("-"));
+                int from = Integer.parseInt(i[0].split(":")[1]);
+                int to = Integer.parseInt(i[1].split(":")[1]);
+                if (from != 0 || to != 0) {
+                    checked = false;
+                    JOptionPane.showMessageDialog(null, "Eingegebene Zeit ist nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                } else {
+                    checked = true;
+                }
             }
+        }catch (NumberFormatException asd){
+            JOptionPane.showMessageDialog(null, "Eingegebene Zeit ist nicht Korrekt", "Achtung", JOptionPane.INFORMATION_MESSAGE);
         }
         return checked;
     }

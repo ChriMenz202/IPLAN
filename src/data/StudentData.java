@@ -9,10 +9,13 @@ package data;
 
 import compare.Course;
 import compare.DayCompare;
+import gui.AdminFrame;
+import gui.Editor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -61,7 +64,7 @@ public class StudentData {
         Value.frame.getContentPane().add(jf);
         Value.frame.getContentPane().add(jLabel);
 
-        JButton save = new JButton("Speichern");
+        JButton save = new JButton("Zurück");
         save.setBounds(320, 417, 155, 28);
         save.setVisible(true);
         save.setBackground(Color.WHITE);
@@ -69,7 +72,8 @@ public class StudentData {
         save.setFocusPainted(false);
         save.addActionListener(e -> {
 
-            //TODO
+            Value.frame.setVisible(false);
+            new Editor("/res/UserList.csv");
 
         });
         Value.frame.getContentPane().add(save);
@@ -83,7 +87,6 @@ public class StudentData {
         delete.addActionListener(e -> {
             if (!(jf.getText().equals(""))) {
                 changeFile();
-                fillField();
             }else{
                 JOptionPane.showMessageDialog(null, "Bitte geben sie einen Kurs ein", "Achtung", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -111,6 +114,12 @@ public class StudentData {
     }
 
     public void fillField(){
+        for (String c:c.getData()) {
+            System.out.println(c);
+        }
+
+
+        field.setText("");
         for (int i = 0; i < c.getData().size(); i++) {
             String tempCourse = String.valueOf(c.getData().get(i));
             for (int j = 0; j < Value.allCourses.getData().size(); j++) {
@@ -142,32 +151,25 @@ public class StudentData {
             }
 
         }
-
-
-
-
-
-
-
-
-        //TODO delete Course.csv from student / course object / refill TextArea
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         field.setText("");
-        for (String c:c.getData()) {
-            System.out.println(c);
+
+            try {
+                FileWriter fw = new FileWriter(f,false);
+                fw.write("");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        for (String a:c.getData()) {
+            new CsvWriter(f,a);
+            for (String all:Value.allCourses.getData()) {
+                if (a.equals(all.split(";")[0])){
+                    Course c = new Course(all.split(";")[0], all.split(";")[1],all.split(";")[2], all.split(";")[3], all.split(";")[4]);
+                    field.append(c.getDay() + "   " + c.getName() + "   " + c.getTime() + "   " + c.getRoom() + "   " + c.getTeacher());
+                    field.append("\n");
+                }
+            }
         }
+
+
     }
 }

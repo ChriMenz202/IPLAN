@@ -28,6 +28,7 @@ public class AssistantFrame {
     JTextField courseField;
     ArrayList<Course> compareList = new ArrayList<>();
     String name;
+    JFrame frame = new JFrame();
 
     public AssistantFrame(String loginDir) {
         this.name = loginDir;
@@ -65,7 +66,7 @@ public class AssistantFrame {
         Value.frame.setVisible(true);
 
         addCourse.addActionListener(e -> {
-            JFrame frame = new JFrame();
+
             frame.setSize(500, 500);
             frame.setTitle("Kurse");
             frame.setLayout(null);
@@ -160,6 +161,7 @@ public class AssistantFrame {
                 new CsvWriter(f, message);
                 courseField.setText("");
                 JOptionPane.showMessageDialog(null, "Ihre Präferenz wurde dem Admin mitgeteilt");
+                frame.setVisible(false);
                 exist = true;
                 break;
             }
